@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plainproof"
+version = "0.1.0"
+description = "Ask number questions in plain English; plainproof tests them and has Aristotle prove or refute them."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Subhendra Basu" }]
+dependencies = ["aristotlelib>=3", "anthropic>=0.40"]
+
+[project.scripts]
+plainproof = "plainproof.cli:main"
+
+[tool.setuptools]
+packages = ["plainproof"]

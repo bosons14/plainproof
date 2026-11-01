@@ -1,0 +1,15 @@
+{
+  "title": "Euler's prime formula",
+  "question": "Does n*n + n + 41 always give a prime number?",
+  "plain_restatement": "For every whole number n, n times n plus n plus 41 is a prime number.",
+  "variables": [
+    {
+      "name": "n",
+      "min": 0,
+      "max": 1000,
+      "meaning": "the number put into the formula"
+    }
+  ],
+  "fidelity_note": "Checks n from 0 to 1,000.",
+  "c_function": "static int is_prime(long long x) {\n    if (x < 2) return 0;\n    for (long long d = 2; d <= x / d; d++) {\n        if (x % d == 0) return 0;\n    }\n    return 1;\n}\nint claim_holds(long long n) {\n    return is_prime(n * n + n + 41);\n}"
+}

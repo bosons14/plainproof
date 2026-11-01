@@ -1,0 +1,15 @@
+{
+  "title": "Squares grow fast (overflow demo)",
+  "question": "Is n squared always at least n?",
+  "plain_restatement": "For every whole number n, n times n is at least n.",
+  "variables": [
+    {
+      "name": "n",
+      "min": 0,
+      "max": 9223372036854775807,
+      "meaning": "any whole number"
+    }
+  ],
+  "fidelity_note": "Range deliberately too big, to show the overflow warning.",
+  "c_function": "int claim_holds(long long n) {\n    return n * n >= n;\n}"
+}

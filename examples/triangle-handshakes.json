@@ -1,0 +1,15 @@
+{
+  "title": "Handshakes at a party",
+  "question": "If everyone at a party shakes hands with everyone else once, is the number of handshakes always n(n-1)/2?",
+  "plain_restatement": "At a party of p people where each pair shakes hands once, the number of handshakes is p times (p minus 1), divided by 2.",
+  "variables": [
+    {
+      "name": "p",
+      "min": 0,
+      "max": 3000,
+      "meaning": "number of people"
+    }
+  ],
+  "fidelity_note": "Checks parties of up to 3,000 people by counting every pair.",
+  "c_function": "int claim_holds(long long p) {\n    long long count = 0;\n    for (long long a = 0; a < p; a++)\n        for (long long b = a + 1; b < p; b++)\n            count++;\n    return count == p * (p - 1) / 2;\n}"
+}

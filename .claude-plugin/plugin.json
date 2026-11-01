@@ -1,0 +1,13 @@
+{
+  "name": "plainproof",
+  "version": "0.1.0",
+  "description": "Plain-English maths for everyone: Claude restates a number question as an exact claim, tests it locally for free, then has Harmonic's Aristotle prove or refute it, and explains the verdict without jargon.",
+  "author": {
+    "name": "Subhendra Basu",
+    "url": "https://github.com/bosons14"
+  },
+  "homepage": "https://github.com/bosons14/plainproof",
+  "repository": "https://github.com/bosons14/plainproof",
+  "license": "MIT",
+  "keywords": ["math", "maths", "aristotle", "harmonic", "proof", "formal-verification", "education", "number-theory"]
+}
