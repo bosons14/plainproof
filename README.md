@@ -73,10 +73,14 @@ someone sent you.
 /plugin install plainproof@plainproof
 ```
 
+The plugin also connects **Aristotle's hosted MCP server** (`https://aristotle.harmonic.fun/mcp`).
+The first time a proof is needed, run `/mcp`, pick `aristotle`, choose **Authenticate** and sign in
+with your Aristotle account. After that, Claude sends claims to Aristotle directly, with no SDK install or API key.
+If the MCP route isn't available, the plugin falls back to the command-line SDK.
+
 Then just ask Claude Code a question, e.g. *"Is it true that n² + n + 41 is always prime?"*, or run
 `/plainproof:ask`. Inside Claude Code, Claude itself does the translating and explaining, so **no
-Anthropic API key is needed**: only a C compiler, and for proofs `pip install "aristotlelib>=3"` plus
-`aristotle login`. `/plainproof:resume` checks on a proof that is still running.
+Anthropic API key is needed**: only Python and a C compiler, plus an Aristotle sign-in for proofs. `/plainproof:resume` checks on a proof that is still running.
 
 ## Install the command-line tool
 
@@ -110,6 +114,15 @@ Each run is saved under `plainproof-runs/<date>-<title>/`:
 | `claim.c` | exactly what was sent to Aristotle |
 | `quick.json`, `aristotle.json` | raw verdicts |
 
+`plainproof prompt spec.json [--json]` prints exactly what goes to Aristotle (prompt and `claim.c`),
+for sending it through the MCP server or the web app yourself.
+
+### Without a terminal: claude.ai
+
+Add `https://aristotle.harmonic.fun/mcp` as a custom connector in claude.ai's connector settings and
+sign in with Aristotle. Claude can then write the claim, send it to Aristotle and explain the result
+right in the chat.
+
 `--show-code` prints the C translation, if you're curious or want to double-check it.
 
 ## Trust: what you're relying on
@@ -131,7 +144,7 @@ Each run is saved under `plainproof-runs/<date>-<title>/`:
 ## Development
 
 ```bash
-pytest -q tests   # 16 tests; the Aristotle and Claude calls are stubbed
+pytest -q tests   # 17 tests; the Aristotle and Claude calls are stubbed
 ```
 
 MIT licence. Not affiliated with Harmonic or Anthropic.

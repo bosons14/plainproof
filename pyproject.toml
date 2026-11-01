@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "plainproof"
-version = "0.1.0"
+version = "0.2.0"
 description = "Ask number questions in plain English; plainproof tests them and has Aristotle prove or refute them."
 readme = "README.md"
 requires-python = ">=3.10"

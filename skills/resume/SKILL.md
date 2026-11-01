@@ -2,17 +2,19 @@
 name: resume
 description: "This skill should be used when the user asks how a plainproof or Aristotle maths proof is going, whether it finished, \"what did Aristotle say\", or wants the answer to a proof started earlier, or runs /plainproof:resume. Follows a run in plainproof-runs/ to its end and explains the verdict in plain language."
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # plainproof: check on a proof
 
-1. **Find the run.** Runs live in `plainproof-runs/<date>-<title>/` in the working directory; one that
-   went to Aristotle holds `aristotle_project.txt`. If the person didn't say which, take the newest
+1. **Find the run.** Runs live in `plainproof-runs/` in the working directory. A run sent with the
+   CLI is a folder `<date>-<title>/` holding `aristotle_project.txt`; a run sent through the Aristotle
+   MCP server has a `<slug>.mcp.json` file holding its project id. If the person didn't say which, take the newest
    such folder and name its title so they can correct you.
 
-2. **Follow it.** Run `"${CLAUDE_PLUGIN_ROOT}/bin/plainproof" resume <run-folder>` (find the launcher
-   as the `ask` skill describes if the variable is empty). It polls every 30 seconds until the run
+2. **Follow it.** For an MCP run, use the `aristotle` MCP server's status and properties tools with
+   the saved project id (ask the person to authenticate via `/mcp` if needed), and save the verdict to
+   `<slug>.result.json`. For a CLI run, `"${CLAUDE_PLUGIN_ROOT}/bin/plainproof" resume <run-folder>` (find the launcher as the `ask` skill describes if the variable is empty). It polls every 30 seconds until the run
    ends and writes `aristotle.json` and `answer.md`. Runs often take tens of minutes: run it in the
    background and tell the person roughly where it stands, rather than blocking the conversation.
    Stopping the wait does not stop Aristotle.

@@ -157,3 +157,14 @@ def test_poll_collects_verdict(monkeypatch):
     assert p.status == "REFUTED" and p.evidence == "COUNTEREXAMPLE"
     text = explain.fallback(two_odds(), None, result)
     assert text.startswith("FALSE") and "a=1, b=1" in text
+
+
+def test_prompt_command_matches_cli_submission(capsys):
+    from plainproof.cli import main
+
+    assert main(["prompt", str(EXAMPLES / "goldbach.json"), "--json"]) == 0
+    out = json.loads(capsys.readouterr().out)
+    spec = ClaimSpec.load(EXAMPLES / "goldbach.json")
+    assert out["prompt"] == aristotle_run.build_prompt(spec)
+    assert out["files"]["claim.c"] == spec.claim_c_source()
+    assert out["property_name"] == aristotle_run.PROPERTY_NAME

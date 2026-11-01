@@ -199,6 +199,21 @@ def cmd_resume(args) -> int:
     return 0
 
 
+def cmd_prompt(args) -> int:
+    """Print what goes to Aristotle (prompt, then claim.c), for clients that submit through MCP."""
+    from .aristotle_run import PROPERTY_NAME, build_prompt
+
+    spec = ClaimSpec.load(args.spec)
+    if args.json:
+        print(json.dumps({"prompt": build_prompt(spec), "property_name": PROPERTY_NAME,
+                          "files": {"claim.c": spec.claim_c_source()}}, indent=2))
+    else:
+        print(build_prompt(spec))
+        print("\n----- claim.c -----")
+        print(spec.claim_c_source())
+    return 0
+
+
 def cmd_examples(args) -> int:
     here = Path(__file__).resolve().parent.parent / "examples"
     for f in sorted(here.glob("*.json")):
@@ -234,6 +249,11 @@ def main(argv: list[str] | None = None) -> int:
     r = sub.add_parser("resume", help="wait for, and explain, an Aristotle run started earlier")
     r.add_argument("target", help="the run folder under plainproof-runs/")
     r.set_defaults(fn=cmd_resume)
+
+    pr = sub.add_parser("prompt", help="print the Aristotle prompt and claim.c (for MCP clients)")
+    pr.add_argument("spec")
+    pr.add_argument("--json", action="store_true")
+    pr.set_defaults(fn=cmd_prompt)
 
     e = sub.add_parser("examples", help="list the bundled example claims")
     e.set_defaults(fn=cmd_examples)

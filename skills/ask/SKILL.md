@@ -2,7 +2,7 @@
 name: ask
 description: "This skill should be used when the user asks a yes/no question about whole numbers in everyday language and wants it checked or proved - \"is it always true that...\", \"does this formula always give a prime\", \"prove that the sum of two odd numbers is even\", \"check this number pattern\", \"is my maths trick right\" - or mentions plainproof or Aristotle for a maths question, or runs /plainproof:ask. Restates the claim in plain words, tests it locally for free, and optionally has Harmonic's Aristotle prove or refute it."
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # plainproof: ask a maths question in plain English
@@ -71,6 +71,29 @@ It needs Python 3.10+ and a C compiler (`cc`, `gcc` or `clang`). Below, `PP` mea
    - **No counterexample** → say it is strong evidence but not proof, then offer step 5.
 
 5. **Proof by Aristotle (costs credits, typically tens of minutes)**: only after the person agrees.
+   Two routes; prefer the first.
+
+   **A. Aristotle MCP server (preferred).** The plugin connects Aristotle's hosted server
+   (`https://aristotle.harmonic.fun/mcp`, server name `aristotle`). If its tools are listed (they may
+   need loading via tool search), use them:
+   - Not signed in yet → ask the person to run `/mcp`, pick `aristotle`, and choose Authenticate
+     (OAuth with their Aristotle account). Never ask for a key in the chat.
+   - Get the payload: `PP prompt plainproof-runs/<slug>.json --json` → `prompt`, `property_name`,
+     and `files["claim.c"]`. Send exactly these: the prompt unchanged, and claim.c as the project's
+     only file, at path `claim.c`. Read the tool descriptions to see how files go up (upload, or
+     file contents in the request) and follow them. If a setting turns off agent questions, turn
+     them off; the prompt already states every assumption.
+   - If no tool can attach a file, say so and use route B. Do not paste C into a prompt-only
+     submission and hope: without the file, the run may verify nothing.
+   - Note the project id and link, tell the person, and save them to
+     `plainproof-runs/<slug>.mcp.json` (`{"project_id": ..., "url": ...}`) so the `resume` skill
+     can find the run later.
+   - When the run ends, read the property named `property_name` (status PROVED / REFUTED / other,
+     evidence, explanation) with the server's status/properties tools. Write it to
+     `plainproof-runs/<slug>.result.json` in the same shape the CLI uses (see the status table below),
+     then go to step 6.
+
+   **B. Command-line SDK (fallback).** When the MCP tools are missing or can't attach files:
    - Needs the SDK: `python3 -c "import aristotlelib"`; if missing, `pip install "aristotlelib>=3"`
      (add `--user` or use a venv as the environment requires).
    - Needs a key: `ARISTOTLE_API_KEY`, or a stored login. If neither, run `aristotle login` and
@@ -80,7 +103,7 @@ It needs Python 3.10+ and a C compiler (`cc`, `gcc` or `clang`). Below, `PP` mea
      `PP resume <run-folder>` (run in the background, or have the person ask you later; see the
      `resume` skill).
 
-6. **Explain the verdict** from `<run-folder>/aristotle.json` and `quick.json`, in at most ~150 words:
+6. **Explain the verdict** from the result (`<run-folder>/aristotle.json`, or the MCP result file) and the quick test, in at most ~150 words:
    lead with the verdict; say exactly what was established and its range limit ("proved for every
    n from 0 to 100,000 — not beyond"); for a refutation, show the counterexample as a worked example;
    for a proof, give the everyday intuition for why it's true if there is a simple one; end with one
